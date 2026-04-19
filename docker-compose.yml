@@ -7,7 +7,7 @@ services:
       - .env
     environment:
       - QC_DB_URL=postgres://user:password@db:5432/quillcrypt?sslmode=disable
-      - QC_REDIS_URL=redis:6379
+      - QC_REDIS_URL=redis://redis:6379
     depends_on:
       db:
         condition: service_healthy
@@ -15,7 +15,7 @@ services:
         condition: service_healthy
 
   db:
-    image: dhi.io/postgres:16
+    image: postgres:17-alpine
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
@@ -31,7 +31,7 @@ services:
       retries: 5
 
   redis:
-    image: dhi.io/redis:7
+    image: redis:8-alpine
     ports:
       - "6379:6379"
     volumes:
