@@ -57,4 +57,3 @@ func Migrate() {
 
 	logger.Info("Postgres migrations applied successfully")
 }
-

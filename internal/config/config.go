@@ -22,6 +22,7 @@ type config struct {
 	RedisURL            string `default:""`
 	PGURL               string `default:""`
 	SessionSecret       string `default:"quillcrypt-secret-key"`
+	LogFilePath         string `default:""`
 }
 
 var Config config

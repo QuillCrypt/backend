@@ -20,7 +20,7 @@ func Init(mode int) {
 		config = zap.NewProductionConfig()
 		config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 	default:
-	log.Fatalf("Invalid mode value. Expected 0 (dev) or 1 (prod), got %d", mode)
+		log.Fatalf("Invalid mode value. Expected 0 (dev) or 1 (prod), got %d", mode)
 	}
 	var err error
 	Log, err = config.Build(zap.AddCallerSkip(1))
