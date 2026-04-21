@@ -6,6 +6,7 @@ import (
 	"os/signal"
 	"quillcrypt-backend/internal/api/router"
 	"quillcrypt-backend/internal/config"
+	"quillcrypt-backend/internal/core/service"
 	"quillcrypt-backend/internal/repository/postgres"
 	"quillcrypt-backend/internal/repository/redis"
 	"quillcrypt-backend/pkg/logger"
@@ -31,7 +32,9 @@ func main() {
 	defer postgres.DB.Close()
 	app := fiber.New()
 
-	router.SetupRoutes(app)
+	userRepo := postgres.NewUserRepository(postgres.DB)
+	userService := service.NewUserService(userRepo)
+	router.SetupRoutes(app, userService)
 
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
@@ -58,4 +61,3 @@ func main() {
 		logger.Info("Server exited gracefully")
 	}
 }
-
