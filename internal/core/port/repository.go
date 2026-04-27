@@ -16,8 +16,8 @@ type UserRepository interface {
 }
 
 type MessageRepository interface {
-	Save(ctx context.Context, msg *domain.Message) error
-	GetConversation(ctx context.Context, user1, user2 uuid.UUID, limit int, offset int) ([]domain.Message, error)
+	Save(ctx context.Context, msg *domain.Message) (*domain.Message, error)
+	Delete(ctx context.Context, msg *domain.MessageDelete) error
 }
 
 type KeyRepository interface {
