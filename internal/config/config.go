@@ -30,7 +30,7 @@ var Config config
 func LoadConfig() {
 	err := godotenv.Load()
 	if err != nil {
-		logger.Log.Warn("No .env file found")
+		logger.Warn("No .env file found")
 	}
 	err = envconfig.Process("QC", &Config)
 	if err != nil {

@@ -30,21 +30,36 @@ func Init(mode int) {
 }
 
 func Info(msg string, fields ...zap.Field) {
+	if Log == nil {
+		return
+	}
 	Log.Info(msg, fields...)
 }
 
 func Error(msg string, fields ...zap.Field) {
+	if Log == nil {
+		return
+	}
 	Log.Error(msg, fields...)
 }
 
 func Warn(msg string, fields ...zap.Field) {
+	if Log == nil {
+		return
+	}
 	Log.Warn(msg, fields...)
 }
 
 func Debug(msg string, fields ...zap.Field) {
+	if Log == nil {
+		return
+	}
 	Log.Debug(msg, fields...)
 }
 
 func Panic(msg string, fields ...zap.Field) {
+	if Log == nil {
+		log.Panic(msg)
+	}
 	Log.Panic(msg, fields...)
 }
