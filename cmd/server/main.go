@@ -51,7 +51,7 @@ func main() {
 
 	addr := net.JoinHostPort("", strconv.Itoa(config.Config.Port))
 	if err := app.Listen(addr, fiber.ListenConfig{
-		EnablePrefork:     true,
+		EnablePrefork:     false,
 		EnablePrintRoutes: true,
 	}); err != nil {
 		logger.Panic("Server failed to start", zap.Error(err))
