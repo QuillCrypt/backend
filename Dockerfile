@@ -1,4 +1,8 @@
-FROM dhi.io/golang:1.26 AS builder
+FROM golang:1.26-alpine AS builder
+
+RUN apk add --no-cache git protobuf make
+RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest && \
+    go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 
 WORKDIR /app
 
@@ -8,16 +12,14 @@ RUN go mod download
 COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o server ./cmd/server/main.go
 
-# Final chapter: THE Hardened Static Base
-FROM dhi.io/static:latest
+FROM alpine:latest
 
 WORKDIR /app
 
 COPY --from=builder /app/server .
-
-# Using the pre-configured non-root user (standard for hardened images)
-USER 65532
+COPY --from=builder /app/migrations ./migrations
 
 EXPOSE 8080
+EXPOSE 50051
 
-CMD ["./server"]
+CMD ["/app/server"]

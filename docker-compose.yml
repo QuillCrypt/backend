@@ -3,11 +3,14 @@ services:
     build: .
     ports:
       - "8080:8080"
+      - "50051:50051"
     env_file:
       - .env
     environment:
-      - QC_DB_URL=postgres://user:password@db:5432/quillcrypt?sslmode=disable
-      - QC_REDIS_URL=redis://redis:6379
+      - QC_PORT=8080
+      - QC_MODE=1
+      - QC_PGURL=postgres://user:password@db:5432/quillcrypt?sslmode=disable
+      - QC_REDISURL=redis://redis:6379
     depends_on:
       db:
         condition: service_healthy
