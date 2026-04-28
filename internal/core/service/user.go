@@ -27,7 +27,6 @@ func (s *userService) RegisterOrLogin(ctx context.Context, user *domain.User) (*
 	}
 
 	err = s.repo.Create(ctx, user)
-	err = nil
 	return user, err
 }
 
