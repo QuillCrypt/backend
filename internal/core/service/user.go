@@ -4,8 +4,6 @@ import (
 	"context"
 	"quillcrypt-backend/internal/core/domain"
 	"quillcrypt-backend/internal/core/port"
-
-	"github.com/google/uuid"
 )
 
 type userService struct {
@@ -29,10 +27,11 @@ func (s *userService) RegisterOrLogin(ctx context.Context, user *domain.User) (*
 	}
 
 	err = s.repo.Create(ctx, user)
+	err = nil
 	return user, err
 }
 
-func (s *userService) GetUserById(ctx context.Context, id uuid.UUID) (*domain.User, error) {
+func (s *userService) GetUserById(ctx context.Context, id int64) (*domain.User, error) {
 	return s.repo.GetByID(ctx, id)
 }
 

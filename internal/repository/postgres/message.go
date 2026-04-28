@@ -2,10 +2,12 @@ package postgres
 
 import (
 	"context"
+	"errors"
 	"quillcrypt-backend/internal/core/domain"
 	"quillcrypt-backend/internal/core/port"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -32,26 +34,33 @@ func (h *messageRepository) Save(ctx context.Context, msg *domain.Message) (*dom
 }
 
 func (h *messageRepository) Delete(ctx context.Context, msg *domain.MessageDelete) error {
-	query := `SELECT id, type FROM messages WHERE id = $1 AND sender_id = $2 AND reciever_id = $2`
+	query := `SELECT id, type FROM messages WHERE id = $1 AND sender_id = $2 AND receiver_id = $3`
 	var id uuid.UUID
 	var msgType domain.MessageType
-	err := h.db.QueryRow(ctx, query, msg.ID, msg.SenderId, msg.RecieverId).Scan(&id, &msgType)
-	if err != nil {
+
+	err := h.db.QueryRow(ctx, query, msg.ID, msg.SenderID, msg.ReceiverID).Scan(&id, &msgType)
+	if err != nil && !errors.Is(err, pgx.ErrNoRows) {
 		return err
 	}
-	if id != uuid.Nil && msgType == domain.CHAT {
-		query = `DELETE FROM messages WHERE id = $1`
-		_, err = h.db.Exec(ctx, query, msg.ID)
+
+	if err == nil && msgType == domain.SYSTEM {
+		return nil
+	}
+
+	if err == nil && msgType == domain.CHAT {
+		deleteQuery := `DELETE FROM messages WHERE id = $1`
+		_, err = h.db.Exec(ctx, deleteQuery, msg.ID)
 		if err != nil {
 			return err
 		}
 		return nil
 	}
-	
-	query = `INSERT INTO messages_delete (id, sender_id, reciever_id) VALUES ($1, $2, $3)`
-	_, err = h.db.Exec(ctx, query, msg.ID, msg.SenderId, msg.RecieverId)
+
+	insertQuery := `INSERT INTO messages_delete (id, sender_id, receiver_id) VALUES ($1, $2, $3)`
+	_, err = h.db.Exec(ctx, insertQuery, msg.ID, msg.SenderID, msg.ReceiverID)
 	if err != nil {
 		return err
 	}
+
 	return nil
 }

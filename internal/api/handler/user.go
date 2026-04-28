@@ -4,7 +4,6 @@ import (
 	"quillcrypt-backend/internal/core/port"
 
 	"github.com/gofiber/fiber/v3"
-	"github.com/google/uuid"
 )
 
 type UserHandler struct {
@@ -16,9 +15,8 @@ func NewUserHandler(userService port.UserService) *UserHandler {
 }
 
 func (h *UserHandler) GetMe(c fiber.Ctx) error {
-	uidKey := c.Locals("user_id").(string)
-	uid, err := uuid.Parse(uidKey)
-	if err != nil {
+	uid := c.Locals("user_id").(int64)
+	if uid <= 0 {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":  fiber.StatusBadRequest,
 			"message": "Invalid user id",

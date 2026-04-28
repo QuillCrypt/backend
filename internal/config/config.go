@@ -7,22 +7,18 @@ import (
 	"github.com/kelseyhightower/envconfig"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/providers/github"
-	"github.com/markbates/goth/providers/google"
 )
 
 type config struct {
-	Mode                int `default:"0"`
-	Port                int `default:"8080"`
-	Gh_ClientId         string
-	Gh_ClientSecret     string
-	Gh_Callback         string `default:"http://localhost:8080/auth/github/callback"`
-	Google_ClientId     string
-	Google_ClientSecret string
-	Google_Callback     string `default:"http://localhost:8080/auth/google/callback"`
-	RedisURL            string `default:""`
-	PGURL               string `default:""`
-	SessionSecret       string `default:"quillcrypt-secret-key"`
-	LogFilePath         string `default:""`
+	Mode            int `default:"0"`
+	Port            int `default:"8080"`
+	Gh_ClientId     string
+	Gh_ClientSecret string
+	Gh_Callback     string `default:"http://localhost:8080/auth/github/callback"`
+	RedisURL        string
+	PGURL           string
+	SessionSecret   string `default:"quillcrypt-secret-key"`
+	LogFilePath     string
 }
 
 var Config config
@@ -38,7 +34,6 @@ func LoadConfig() {
 	}
 
 	goth.UseProviders(
-		github.New(Config.Gh_ClientId, Config.Gh_ClientSecret, Config.Gh_Callback),
-		google.New(Config.Google_ClientId, Config.Google_ClientSecret, Config.Google_Callback),
+		github.New(Config.Gh_ClientId, Config.Gh_ClientSecret, Config.Gh_Callback, "read:user", "user:email"),
 	)
 }

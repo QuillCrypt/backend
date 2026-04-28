@@ -14,8 +14,8 @@ func SetupRoutes(app *fiber.App, userService port.UserService) {
 	authHandler := handler.NewAuthHandler(userService)
 
 	auth := app.Group("/auth")
-	auth.Get("/:provider", authHandler.BeginAuth)
-	auth.Get("/:provider/callback", authHandler.AuthCallback)
+	auth.Get("/", authHandler.BeginAuth)
+	auth.Get("/callback", authHandler.AuthCallback)
 	auth.Post("/logout", authHandler.Logout)
 
 	app.Use(func(c fiber.Ctx) error {

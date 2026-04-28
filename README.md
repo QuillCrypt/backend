@@ -2,7 +2,7 @@
 
 QuillCrypt is a secure, end-to-end encrypted messaging platform for developers. This repository contains the backend service, built with Go and designed using Hexagonal Architecture (Ports and Adapters) for high maintainability and scalability.
 
-> **Note**: This project is currently under active development. Many features listed below are planned and will be implemented in upcoming releases.
+> **Note**: This project is currently under active development. Developers are advised NOT TO USE THIS BACKEND until versioned releases start as breaking changes may appear. Many features listed below are planned and will be implemented in upcoming releases.
 
 ## 🚀 Planned Features
 
