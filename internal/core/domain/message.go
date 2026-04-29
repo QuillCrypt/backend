@@ -15,8 +15,8 @@ const (
 
 type Message struct {
 	ID         uuid.UUID   `json:"id"`
-	SenderID   int64      `json:"sender_id"`
-	ReceiverID int64      `json:"receiver_id"`
+	SenderID   int64       `json:"sender_id"`
+	ReceiverID int64       `json:"receiver_id"`
 	Content    string      `json:"content"` // Encrypted content
 	CreatedAt  time.Time   `json:"created_at"`
 	Type       MessageType `json:"type"`
@@ -24,7 +24,7 @@ type Message struct {
 
 type MessageDelete struct {
 	ID         uuid.UUID `json:"id"`
-	SenderID   int64    `json:"sender_id"`
-	ReceiverID int64    `json:"receiver_id"`
+	SenderID   int64     `json:"sender_id"`
+	ReceiverID int64     `json:"receiver_id"`
 	CreatedAt  time.Time `json:"created_at"`
 }
