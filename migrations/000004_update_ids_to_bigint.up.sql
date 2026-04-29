@@ -25,5 +25,5 @@ ALTER TABLE messages_delete ADD CONSTRAINT messages_delete_sender_id_fkey FOREIG
 ALTER TABLE messages_delete ADD CONSTRAINT messages_delete_receiver_id_fkey FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE;
 
 -- Recreate indexes
-CREATE INDEX idx_messages_receiver_id ON messages (receiver_id);
-CREATE INDEX idx_messages_delete_receiver_id ON messages_delete (receiver_id);
+CREATE INDEX IF NOT EXISTS idx_messages_receiver_id ON messages (receiver_id);
+CREATE INDEX IF NOT EXISTS idx_messages_delete_receiver_id ON messages_delete (receiver_id);

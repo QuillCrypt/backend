@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"errors"
 	"quillcrypt-backend/internal/config"
 	"quillcrypt-backend/pkg/logger"
 
@@ -51,7 +52,7 @@ func Migrate() {
 		logger.Panic("Unable to create migrate instance", zap.Error(err))
 	}
 
-	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+	if err := m.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
 		logger.Panic("Unable to run migrations", zap.Error(err))
 	}
 
