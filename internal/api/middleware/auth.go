@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"net/http"
 	"quillcrypt-backend/internal/repository/redis"
 	"quillcrypt-backend/pkg/logger"
 
@@ -12,7 +13,7 @@ func WithAuth(c fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"status":  fiber.StatusUnauthorized,
-			"message": "Unauthorized: Session error",
+			"message": http.StatusText(fiber.StatusUnauthorized),
 		})
 	}
 
@@ -20,14 +21,14 @@ func WithAuth(c fiber.Ctx) error {
 	if !ok {
 		logger.Error("cannot convert user_id from session storage to int64")
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"status":fiber.StatusInternalServerError,
-			"message": "Internal server error",
+			"status":  fiber.StatusInternalServerError,
+			"message": http.StatusText(fiber.StatusInternalServerError),
 		})
 	}
 	if userID <= 0 {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"status":  fiber.StatusUnauthorized,
-			"message": "Unauthorized: Login required",
+			"message": http.StatusText(fiber.StatusUnauthorized),
 		})
 	}
 

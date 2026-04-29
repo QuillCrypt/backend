@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"net/http"
 	"quillcrypt-backend/internal/core/port"
 
 	"github.com/gofiber/fiber/v3"
@@ -26,13 +27,13 @@ func (h *UserHandler) GetMe(c fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  fiber.StatusInternalServerError,
-			"message": "Internal server error",
+			"message": http.StatusText(fiber.StatusInternalServerError),
 		})
 	}
 	if user == nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":  fiber.StatusNotFound,
-			"message": "User not found",
+			"message": http.StatusText(fiber.StatusNotFound),
 		})
 	}
 	return c.JSON(user)
