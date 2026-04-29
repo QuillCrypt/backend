@@ -2,18 +2,15 @@ package redis
 
 import (
 	"context"
-	"net/url"
 	"quillcrypt-backend/internal/config"
 	"quillcrypt-backend/pkg/logger"
 	"runtime"
 	"time"
 
-	"github.com/boj/redistore"
 	"github.com/go-redsync/redsync/v4"
 	"github.com/go-redsync/redsync/v4/redis/goredis/v9"
 	"github.com/gofiber/fiber/v3/extractors"
 	"github.com/gofiber/fiber/v3/middleware/session"
-	"github.com/markbates/goth/gothic"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 )
@@ -85,22 +82,6 @@ func InitSession() {
 	// Setup Redsync using the same Client
 	pool := goredis.NewPool(Client)
 	Redsync = redsync.New(pool)
-
-	// Setup Gothic Redis Store
-	u, err := url.Parse(config.Config.RedisURL)
-	if err != nil {
-		logger.Panic("Unable to parse Redis URL for Gothic", zap.Error(err))
-	}
-	host := u.Host
-	if host == "" {
-		host = "localhost:6379"
-	}
-
-	gothStore, err := redistore.NewRediStore(10, "tcp", host, "", "", []byte(config.Config.SessionSecret))
-	if err != nil {
-		logger.Panic("Unable to initialize Gothic Redis store", zap.Error(err))
-	}
-	gothic.Store = gothStore
 
 	logger.Info("Redis session storage initialized")
 }
