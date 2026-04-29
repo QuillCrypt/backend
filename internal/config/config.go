@@ -5,8 +5,8 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/kelseyhightower/envconfig"
-	"github.com/markbates/goth"
-	"github.com/markbates/goth/providers/github"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/github"
 )
 
 type config struct {
@@ -19,9 +19,11 @@ type config struct {
 	PGURL           string
 	SessionSecret   string `default:"quillcrypt-secret-key"`
 	LogFilePath     string
+	MobileCallback  string `default:"quillcrypt://callback"`
 }
 
 var Config config
+var OAuth2Config *oauth2.Config
 
 func LoadConfig() {
 	err := godotenv.Load()
@@ -33,7 +35,11 @@ func LoadConfig() {
 		logger.Panic("Cannot process env vars")
 	}
 
-	goth.UseProviders(
-		github.New(Config.Gh_ClientId, Config.Gh_ClientSecret, Config.Gh_Callback, "read:user", "user:email"),
-	)
+	OAuth2Config = &oauth2.Config{
+		ClientID:     Config.Gh_ClientId,
+		ClientSecret: Config.Gh_ClientSecret,
+		RedirectURL:  Config.Gh_Callback,
+		Endpoint:     github.Endpoint,
+		Scopes:       []string{"read:user", "user:email"},
+	}
 }
