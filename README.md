@@ -57,8 +57,8 @@ This software is designed to facilitate encrypted communications. Please be awar
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/quillcrypt-backend.git
-   cd quillcrypt-backend
+   git clone https://github.com/QuillCrypt/backend.git
+   cd backend
    ```
 
 2. **Configure Environment**:
