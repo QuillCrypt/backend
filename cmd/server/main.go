@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net"
 	"os"
 	"os/signal"
@@ -50,9 +51,17 @@ func main() {
 	}()
 
 	addr := net.JoinHostPort("", strconv.Itoa(config.Config.Port))
+	art := `
+  ____       _ _________              __ 
+ / __ \__ __(_) / / ___/_____ _____  / /_
+/ /_/ / // / / / / /__/ __/ // / _ \/ __/
+\___\_\_,_/_/_/_/\___/_/  \_, / .__/\__/ 
+                         /___/_/          
+`
+	fmt.Print("\n" + art + "\u001B[31mLock your thoughts, \u001B[34mkeep the quill.\n\n")
 	if err := app.Listen(addr, fiber.ListenConfig{
-		EnablePrefork:     false,
 		EnablePrintRoutes: true,
+		DisableStartupMessage: true,
 	}); err != nil {
 		logger.Panic("Server failed to start", zap.Error(err))
 	}
